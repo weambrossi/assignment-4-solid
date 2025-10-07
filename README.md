@@ -1,6 +1,6 @@
 # Assignment 4: SOLID Principles with Spring Data JPA
 
-**Due:** Thursday, October 23 at 11:59 PM
+**Due:** Thursday, October 16 at 11:59 PM
 **Points:** 100
 **Submission:** Via GitHub (one per team)
 
