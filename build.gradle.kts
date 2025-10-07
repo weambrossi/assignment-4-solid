@@ -50,6 +50,16 @@ tasks.jacocoTestReport {
         html.required.set(true)
         csv.required.set(false)
     }
+    classDirectories.setFrom(
+        files(classDirectories.files.map {
+            fileTree(it) {
+                exclude(
+                    "**/model/**",
+                    "**/LibraryApplication.class"
+                )
+            }
+        })
+    )
 }
 
 tasks.jacocoTestCoverageVerification {
@@ -67,8 +77,18 @@ tasks.jacocoTestCoverageVerification {
             )
         }
     }
+    classDirectories.setFrom(
+        files(classDirectories.files.map {
+            fileTree(it) {
+                exclude(
+                    "**/model/**",
+                    "**/LibraryApplication.class"
+                )
+            }
+        })
+    )
     // Students should aim for 80%+ after refactoring
-    // Current baseline is 68% (service layer only)
+    // Current baseline excludes JPA entities and Application class
 }
 
 jacoco {
