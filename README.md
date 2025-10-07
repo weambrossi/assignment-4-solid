@@ -51,6 +51,39 @@ The `LibraryService` class violates multiple SOLID principles:
 - Notification logic is hard-coded (System.out.println)
 - No abstraction between high-level logic and low-level details
 
+## Team Collaboration Requirements
+
+This is a **team assignment** with one submission per team. All team members must contribute meaningfully to the codebase.
+
+### Team Setup
+1. **One team member** forks the assignment repository
+2. **Fork owner** adds teammates as collaborators:
+   - Go to fork Settings → Collaborators → Add people
+3. **All team members** clone the shared fork and commit their work
+
+### Work Distribution
+- Each team member must complete **at least one TODO**
+- Distribute the remaining TODOs however your team prefers
+- Consider your team's strengths when assigning work
+
+**Example for 3-person team:**
+- Alice: TODOs 1, 2, 3 (Service extraction + notifications)
+- Bob: TODOs 4, 5 (Member service + late fees)
+- Carol: TODOs 6, 7, 8 (Search, reports, integration)
+
+### Git Best Practices (Encouraged but not required)
+- Use feature branches for your work: `git checkout -b feature/book-service`
+- Write descriptive commit messages
+- Pull before you push to avoid conflicts
+- Consider creating pull requests for practice (optional)
+
+### Collaboration Grading (10 points)
+**I will review your repository's git history to verify all team members contributed.**
+
+Check your contributions: `GitHub → Insights → Contributors`
+
+Teams where only one person made commits will lose collaboration points.
+
 ## Your Task: 8 TODOs (100 points)
 
 Each TODO in `LibraryService.java` explains what to refactor and why. Here's the breakdown:
@@ -238,24 +271,19 @@ public class AvailabilityReportGenerator implements ReportGenerator {
 }
 ```
 
-### TODO 8: BONUS Integration & Documentation (15 points)
+### TODO 8: Integration & Documentation (5 points)
 
 After completing all refactoring:
 
-1. **Create LibraryFacade** (5 points)
+1. **Create LibraryFacade**
    - Coordinate between all services
    - Present simplified API to controllers
    - Demonstrates Facade pattern
 
-2. **Update Tests** (5 points)
+2. **Update Tests**
    - Ensure all existing tests still pass
    - Add tests for new services
    - Demonstrate testability improvements with mocks
-
-3. **Document Architecture** (5 points)
-   - Create a before/after class diagram
-   - Explain which SOLID principle each change addresses
-   - Show dependency graph
 
 ## Architecture After Refactoring
 
@@ -395,8 +423,9 @@ cd assignment-4-solid
 | TODO 5 - LateFeeCalculator | 10 | Strategy pattern for fees |
 | TODO 6 - BookSearchService | 10 | ISP compliance, focused interface |
 | TODO 7 - ReportGenerator | 10 | Strategy for reports, easily extensible |
-| TODO 8 - BONUS | 15 | Facade, documentation, architecture diagram |
-| **Total** | **100** | Plus 15 bonus points available |
+| TODO 8 - Integration & Docs | 5 | LibraryFacade, updated tests |
+| **Team Collaboration** | **10** | **All members contribute, git history shows distribution** |
+| **Total** | **100** | |
 
 ### Quality Criteria
 - All tests pass ✓
@@ -412,21 +441,21 @@ Document at the top of `LibraryFacade.java`:
 ```java
 /**
  * AI Collaboration Summary:
- * Tool: [ChatGPT/Claude/Copilot/Gemini]
  *
- * Refactoring Assistance:
- * 1. [How AI helped with Strategy pattern]
- * 2. [How AI helped with service extraction]
+ * Team Members and Contributions:
+ * - Alice Smith: TODOs 1, 2, 3
+ * - Bob Jones: TODOs 4, 5
+ * - Carol Kim: TODOs 6, 7, 8
  *
- * AI Mistakes Corrected:
- * 1. [What AI suggested that violated SOLID]
- * 2. [How you identified and fixed it]
+ * AI Tools Used: [ChatGPT/Claude/Copilot/Gemini/etc.]
  *
- * SOLID Insights:
- * [What you learned about applying SOLID principles]
- * [Which principle was hardest to apply and why]
+ * How AI Helped:
+ * - [Describe key ways AI assisted with the refactoring]
+ * - [e.g., "Suggested Strategy pattern structure for checkout policies"]
  *
- * Team: [Member names and contributions]
+ * What We Learned:
+ * - [Key insights about SOLID principles]
+ * - [Which principle was hardest to apply and why]
  */
 ```
 
@@ -448,14 +477,14 @@ Document at the top of `LibraryFacade.java`:
 
 ## Submission Requirements
 
-1. Push all code to your GitHub repository
+1. **One submission per team** - submit your fork's URL to Moodle
 2. Ensure `./gradlew test` passes with 80%+ coverage
-3. Include a `REFACTORING.md` document:
+3. Include completed AI Collaboration documentation in `LibraryFacade.java`
+4. Include a `REFACTORING.md` document:
    - List each SOLID principle
    - Explain how you fixed violations
    - Include before/after code snippets
-4. Submit repository URL to Moodle
-5. Each team member must have meaningful commits
+5. **Verify all team members show in git history**: GitHub → Insights → Contributors
 
 ## Tips for Success
 
