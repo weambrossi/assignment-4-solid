@@ -291,14 +291,19 @@ After completing all refactoring:
 
 ## Testing Requirements
 
-### Minimum Coverage: 80%
-Your refactored code must maintain at least 80% test coverage.
+### Coverage Goal: 80%+
+**Current baseline:** 62% coverage (service layer only)
+**Your goal:** 80%+ coverage after refactoring
+
+As you extract services and add tests for them, your coverage will naturally improve.
 
 ```bash
 ./gradlew test
 ./gradlew jacocoTestReport
 # Check build/reports/jacoco/test/html/index.html
 ```
+
+**Note:** Coverage excludes JPA entity classes and the Application class. Focus on testing business logic in your service classes.
 
 ### Test Categories
 
@@ -345,16 +350,20 @@ Access at http://localhost:8080/h2-console
 
 ## Getting Started
 
-### 1. Fork and Clone
+### 1. Fork the Repository
+1. Go to the GitHub repository
+2. Click "Fork" to create your team's copy
+3. Clone your fork:
 ```bash
-git clone [your-forked-repo-url]
+git clone https://github.com/YOUR-USERNAME/assignment-4-solid.git
 cd assignment-4-solid
 ```
 
-### 2. Run Existing Tests
+### 2. Verify Everything Works
 ```bash
 ./gradlew test
-# All tests should pass with the current (bad) design
+# All 11 tests should pass
+# Current coverage: 62%
 ```
 
 ### 3. Understand the Violations
