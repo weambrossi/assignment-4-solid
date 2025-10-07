@@ -475,15 +475,151 @@ Document at the top of `LibraryFacade.java`:
 - Keep strategies stateless when possible
 - Write new tests for new services
 
+## Documentation Requirements
+
+### REFACTORING.md
+
+Create a `REFACTORING.md` document that explains your refactoring decisions. For each SOLID principle you addressed:
+
+1. **Identify the violation** - What was wrong in the original code?
+2. **Explain your fix** - How did you refactor it?
+3. **Show code examples** - Before/after snippets demonstrating the change
+4. **Justify the design** - Why is this better?
+
+**Template:**
+
+```markdown
+# Refactoring Report: SOLID Principles
+
+## Single Responsibility Principle (SRP)
+
+### Violation
+The original `LibraryService` class had multiple responsibilities:
+- Book operations (checkout, return)
+- Member operations (update checkout counts)
+- Notifications (sending checkout/return messages)
+- Search operations (finding books)
+- Reporting (generating reports)
+
+### Our Solution
+We extracted separate services, each with a single responsibility:
+- `BookService` - manages book state and operations
+- `MemberService` - manages member state and operations
+- `NotificationService` - handles all notifications
+- `BookSearchService` - performs search operations
+
+### Code Example
+
+**Before:**
+```java
+public class LibraryService {
+    public void checkoutBook(String isbn, String memberEmail) {
+        // Book logic
+        // Member logic
+        // Notification logic
+        // All mixed together!
+    }
+}
+```
+
+**After:**
+```java
+public class BookService {
+    public void checkoutBook(Book book, Member member, int loanPeriodDays) {
+        // Only book-related operations
+        book.setStatus(BookStatus.CHECKED_OUT);
+        book.setCheckedOutBy(member.getEmail());
+        book.setDueDate(LocalDate.now().plusDays(loanPeriodDays));
+        bookRepository.save(book);
+    }
+}
+```
+
+### Why This Is Better
+- Each service can be tested independently
+- Changes to one concern don't affect others
+- Easier to understand and maintain
+- Services can be reused in different contexts
+
+---
+
+## Open-Closed Principle (OCP)
+
+### Violation
+The original code used if-else statements to handle different membership types:
+```java
+if (member.getMembershipType() == MembershipType.REGULAR) {
+    maxBooks = 3;
+} else if (member.getMembershipType() == MembershipType.PREMIUM) {
+    maxBooks = 10;
+} // Adding new types requires modifying this code!
+```
+
+### Our Solution
+We implemented the Strategy pattern with `CheckoutPolicy`:
+[Explain your implementation...]
+
+### Code Example
+[Show before/after code...]
+
+### Why This Is Better
+[Explain the benefits...]
+
+---
+
+## Liskov Substitution Principle (LSP)
+
+[If applicable, explain how your refactoring supports proper inheritance...]
+
+---
+
+## Interface Segregation Principle (ISP)
+
+### Violation
+[Explain how the monolithic service would force clients to depend on unused methods...]
+
+### Our Solution
+[Explain how separate, focused services allow clients to depend only on what they need...]
+
+---
+
+## Dependency Inversion Principle (DIP)
+
+### Violation
+The original code depended directly on concrete implementations (System.out.println):
+```java
+System.out.println("Book checked out: " + book.getTitle());
+```
+
+### Our Solution
+We created a `NotificationService` interface and depend on the abstraction:
+[Explain your implementation...]
+
+### Code Example
+[Show before/after code...]
+
+### Why This Is Better
+[Explain the benefits...]
+
+---
+
+## Summary
+
+- **Lines of code changed:** [Approximate number]
+- **New classes/interfaces created:** [List them]
+- **Test coverage improvement:** 62% → [Your coverage]%
+- **Most challenging principle:** [Which one and why]
+- **Key learning:** [What did you learn about SOLID principles?]
+```
+
+Use this template as a starting point. Feel free to add diagrams, additional examples, or other insights.
+
 ## Submission Requirements
 
 1. **One submission per team** - submit your fork's URL to Moodle
 2. Ensure `./gradlew test` passes with 80%+ coverage
 3. Include completed AI Collaboration documentation in `LibraryFacade.java`
-4. Include a `REFACTORING.md` document:
-   - List each SOLID principle
-   - Explain how you fixed violations
-   - Include before/after code snippets
+4. Include completed `REFACTORING.md` document (see template above)
 5. **Verify all team members show in git history**: GitHub → Insights → Contributors
 
 ## Tips for Success
