@@ -4,9 +4,11 @@ import edu.trincoll.model.Book;
 import edu.trincoll.model.BookStatus;
 import edu.trincoll.model.Member;
 import edu.trincoll.model.MembershipType;
-import edu.trincoll.repository.BookRepository;
-import edu.trincoll.repository.MemberRepository;
+import edu.trincoll.repository.*;
+import edu.trincoll.service.*;
+import org.hibernate.annotations.Check;
 import org.springframework.stereotype.Service;
+import edu.trincoll.service.BookService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,10 +31,16 @@ public class LibraryService {
 
     private final BookRepository bookRepository;
     private final MemberRepository memberRepository;
+    private final BookService bookService;
+    private final MemberService memberService;
+    private final EmailNotificationService emailNotificationService;
 
-    public LibraryService(BookRepository bookRepository, MemberRepository memberRepository) {
+    public LibraryService(BookRepository bookRepository, MemberRepository memberRepository, BookService bookService, MemberService memberService, EmailNotificationService emailNotificationService) {
         this.bookRepository = bookRepository;
         this.memberRepository = memberRepository;
+        this.bookService = bookService;
+        this.memberService = memberService;
+        this.emailNotificationService = emailNotificationService;
     }
 
     // TODO 1 (15 points): SRP Violation - This method has multiple responsibilities
@@ -40,59 +48,36 @@ public class LibraryService {
     // Move member-specific operations to a separate MemberService
     public String checkoutBook(String isbn, String memberEmail) {
         // Find book
-        Book book = bookRepository.findByIsbn(isbn)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+        Book book = bookService.getByIsbnOrThrow(isbn);
 
         // Find member
-        Member member = memberRepository.findByEmail(memberEmail)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
-
-        // Check if book is available
-        if (book.getStatus() != BookStatus.AVAILABLE) {
-            return "Book is not available";
-        }
+        Member member = memberService.getByEmail(memberEmail);
 
         // TODO 2 (15 points): OCP Violation - This checkout limit logic violates Open-Closed Principle
         // Create a CheckoutPolicy interface with different implementations for each membership type
         // Use Strategy pattern instead of if-else statements
-        int maxBooks;
-        int loanPeriodDays;
-
-        if (member.getMembershipType() == MembershipType.REGULAR) {
-            maxBooks = 3;
-            loanPeriodDays = 14;
-        } else if (member.getMembershipType() == MembershipType.PREMIUM) {
-            maxBooks = 10;
-            loanPeriodDays = 30;
-        } else if (member.getMembershipType() == MembershipType.STUDENT) {
-            maxBooks = 5;
-            loanPeriodDays = 21;
-        } else {
-            throw new IllegalStateException("Unknown membership type");
-        }
-
-        if (member.getBooksCheckedOut() >= maxBooks) {
+        // STILL NEED TO DO THIS:
+        CheckoutPolicy policy = CheckoutPolicyFactory.getCheckoutPolicy(member.getMembershipType());
+        //Enforce checkout limit:
+        if (!policy.canCheckout(member)) {
             return "Member has reached checkout limit";
         }
 
-        // Update book status
-        book.setStatus(BookStatus.CHECKED_OUT);
-        book.setCheckedOutBy(member.getEmail());
-        book.setDueDate(LocalDate.now().plusDays(loanPeriodDays));
-        bookRepository.save(book);
-
-        // Update member
-        member.setBooksCheckedOut(member.getBooksCheckedOut() + 1);
-        memberRepository.save(member);
+        int loanPeriodDays = policy.getLoanPeriodDays();
+        int maxBooks = policy.getMaxBooks();
+        try {
+            bookService.checkoutBook(book, member, loanPeriodDays);
+        }   catch(IllegalStateException exception) {
+            return exception.getMessage();
+        }
+        // Update member (Updated)
+        memberService.incrementCheckedOut(member);
 
         // TODO 3 (10 points): SRP Violation - Notification logic should be separate
         // Create a NotificationService interface with email implementation
         // This demonstrates DIP (depend on abstraction, not concrete email sending)
-        System.out.println("Sending email to: " + member.getEmail());
-        System.out.println("Subject: Book checked out");
-        System.out.println("Message: You have checked out " + book.getTitle());
-
-        return "Book checked out successfully. Due date: " + book.getDueDate();
+        LocalDate dueDate = book.getDueDate();
+        return emailNotificationService.sendCheckoutNotification(member, book, dueDate);
     }
 
     // TODO 4 (15 points): SRP Violation - Return book logic should be in BookService
