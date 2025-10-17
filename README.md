@@ -66,10 +66,11 @@ This is a **team assignment** with one submission per team. All team members mus
 - Distribute the remaining TODOs however your team prefers
 - Consider your team's strengths when assigning work
 
-**Example for 3-person team:**
-- Alice: TODOs 1, 2, 3 (Service extraction + notifications)
-- Bob: TODOs 4, 5 (Member service + late fees)
-- Carol: TODOs 6, 7, 8 (Search, reports, integration)
+**Team 3 Collaboration**
+- Ethan: TODOs 1-4 (Service extraction + notifications)
+- Shane: TODOs 5, 6 & 8 (Member service + late fees)
+- Ralston: TODO 8 (Search, reports, integration)
+- Quinn: TODO 7 (Report generation)
 
 ### Git Best Practices (Encouraged but not required)
 - Use feature branches for your work: `git checkout -b feature/book-service`
@@ -621,6 +622,19 @@ Use this template as a starting point. Feel free to add diagrams, additional exa
 3. Include completed AI Collaboration documentation in `LibraryFacade.java`
 4. Include completed `REFACTORING.md` document (see template above)
 5. **Verify all team members show in git history**: GitHub → Insights → Contributors
+
+### AI Collaboration Report
+
+- The Codex AI assistant helped implement the SOLID refactorings: introduced `LibraryFacade`, rewired `CheckoutPolicyFactory`, updated notification abstractions, and added the new report generators (`Availability`, `Overdue`, `MemberCount`).
+- AI wrote targeted unit tests to lift coverage to 89.02%—covering `LibraryFacade`, `LibraryService`, `BookService`, `MemberService`, `CheckoutPolicyFactory`, `EmailNotificationService`, and report strategies.
+- The assistant authored the comprehensive `REFACTORING.md` documenting violations, fixes, and design rationale aligned with the refactored code.
+
+### Team Responsibilities
+
+- Ethan: Completed TODOs 1–4 (BookService extraction, CheckoutPolicy strategy, Notification abstraction, MemberService extraction).
+- Shane: Completed TODOs 5, 6, and 8 (LateFee strategy, BookSearchService, integration/testing/documentation wrap-up).
+- Ralston: Partnered on TODO 8 (integration diagramming, facade coordination, documentation review).
+- Quinn: Completed TODO 7 (reporting strategy extraction and generator implementations).
 
 ## Tips for Success
 

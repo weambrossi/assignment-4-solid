@@ -3,8 +3,10 @@ package edu.trincoll.service;
 import edu.trincoll.model.Book;
 import edu.trincoll.model.BookStatus;
 import edu.trincoll.report.AvailabilityReportGenerator;
+import edu.trincoll.report.MemberCountReportGenerator;
 import edu.trincoll.report.OverdueReportGenerator;
 import edu.trincoll.repository.BookRepository;
+import edu.trincoll.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -117,6 +119,24 @@ class ReportServiceTest {
             assertThat(report).doesNotContain("The Pragmatic Programmer");
 
             verify(repo).findByDueDateBefore(any(LocalDate.class));
+        }
+    }
+
+    @Nested
+    @DisplayName("MemberCountReportGenerator")
+    class MemberCountReportGeneratorTests {
+
+        @Test
+        @DisplayName("reports total member count")
+        void memberCount_reportsTotal() {
+            MemberRepository repo = mock(MemberRepository.class);
+            when(repo.count()).thenReturn(42L);
+
+            var gen = new MemberCountReportGenerator(repo);
+
+            assertThat(gen.getReportName()).isEqualTo("members");
+            assertThat(gen.generateReport()).isEqualTo("Total members: 42");
+            verify(repo).count();
         }
     }
 }

@@ -18,6 +18,11 @@ public class OverdueReportGenerator implements ReportGenerator {
     }
 
     @Override
+    public String getReportName() {
+        return "overdue";
+    }
+
+    @Override
     public String generateReport() {
         LocalDate today = LocalDate.now();
         List<Book> overdueCheckedOut = bookRepository.findByDueDateBefore(today).stream()

@@ -1,19 +1,8 @@
 package edu.trincoll.service;
 
-import edu.trincoll.repository.BookRepository;
-import edu.trincoll.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import edu.trincoll.model.Book;
-import edu.trincoll.model.BookStatus;
 import edu.trincoll.model.Member;
-import edu.trincoll.model.MembershipType;
-import edu.trincoll.repository.BookRepository;
 import edu.trincoll.repository.MemberRepository;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class MemberService {
@@ -39,7 +28,4 @@ public class MemberService {
         }
         return memberRepository.save(member);
     }
-
-
-
 }

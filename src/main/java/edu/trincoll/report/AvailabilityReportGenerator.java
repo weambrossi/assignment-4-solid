@@ -17,6 +17,11 @@ public class AvailabilityReportGenerator implements ReportGenerator {
     }
 
     @Override
+    public String getReportName() {
+        return "available";
+    }
+
+    @Override
     public String generateReport() {
         List<Book> available = bookRepository.findByStatus(BookStatus.AVAILABLE);
         if (available.isEmpty()) return "No available books.";
@@ -25,5 +30,4 @@ public class AvailabilityReportGenerator implements ReportGenerator {
                 .collect(Collectors.joining("\n", "Available Books:\n", ""));
     }
 }
-
 
