@@ -13,6 +13,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import edu.trincoll.service.latefee.LateFeeCalculatorFactory;
+import edu.trincoll.service.latefee.PremiumLateFeeCalculator;
+import edu.trincoll.service.latefee.RegularLateFeeCalculator;
+import edu.trincoll.service.latefee.StudentLateFeeCalculator;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -30,6 +34,7 @@ class LibraryServiceTest {
     // Mocked repos
     @Mock private BookRepository bookRepository;
     @Mock private MemberRepository memberRepository;
+    @Mock private LateFeeCalculatorFactory lateFeeCalculatorFactory;  // NEW
 
     // Real services with mocked repos injected
     @InjectMocks private BookService bookService;
@@ -72,6 +77,9 @@ class LibraryServiceTest {
         inject(libraryService, "bookService", bookService);
         inject(libraryService, "memberService", memberService);
         inject(libraryService, "emailNotificationService", emailNotificationService);
+        inject(libraryService, "lateFeeCalculatorFactory", lateFeeCalculatorFactory);
+
+// NEW: default stub for factory so all returnBook tests work
     }
 
     // Simple reflection injector for private fields
@@ -235,6 +243,8 @@ class LibraryServiceTest {
                 .thenReturn(Optional.of(regularMember));
         when(bookRepository.save(any(Book.class))).thenAnswer(inv -> inv.getArgument(0));
         when(memberRepository.save(any(Member.class))).thenAnswer(inv -> inv.getArgument(0));
+        when(lateFeeCalculatorFactory.getCalculator(MembershipType.REGULAR))
+                .thenReturn(new edu.trincoll.service.latefee.RegularLateFeeCalculator());
 
         regularMember.setBooksCheckedOut(1);
 
@@ -260,6 +270,8 @@ class LibraryServiceTest {
                 .thenReturn(Optional.of(premiumMember));
         when(bookRepository.save(any(Book.class))).thenAnswer(inv -> inv.getArgument(0));
         when(memberRepository.save(any(Member.class))).thenAnswer(inv -> inv.getArgument(0));
+        when(lateFeeCalculatorFactory.getCalculator(MembershipType.PREMIUM))
+                .thenReturn(new edu.trincoll.service.latefee.PremiumLateFeeCalculator());
 
         premiumMember.setBooksCheckedOut(1);
 
